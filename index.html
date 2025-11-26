@@ -9,191 +9,52 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #F6F6F6;
-            --card-bg: #FFFFFF;
-            --text-primary: #000000;
-            --text-secondary: #5E5E5E;
-            --accent-black: #000000;
-            --accent-blue: #276EF1;
-            --danger: #E11900;
-            --warning: #FFC043;
-            --success: #05A357;
-            --radius: 12px;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
+        /* ... (CSS remains exactly the same as before) ... */
+        :root { --bg-color: #F6F6F6; --card-bg: #FFFFFF; --text-primary: #000000; --text-secondary: #5E5E5E; --accent-black: #000000; --accent-blue: #276EF1; --danger: #E11900; --warning: #FFC043; --success: #05A357; --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 100px;
-        }
-
-        /* Header */
-        header {
-            background: var(--card-bg);
-            padding: 20px 24px;
-            padding-top: 60px;
-            border-bottom: 1px solid #E0E0E0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-primary); margin: 0; padding: 0; padding-bottom: 100px; }
+        header { background: var(--card-bg); padding: 20px 24px; padding-top: 60px; border-bottom: 1px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
         h1 { font-size: 24px; margin: 0; font-weight: 700; letter-spacing: -0.5px; }
         .subtitle { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
-
-        /* Child Selector */
-        .child-selector {
-            display: flex;
-            background: #EEEEEE;
-            padding: 4px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-        .child-btn {
-            flex: 1;
-            border: none;
-            background: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .child-btn.active {
-            background: white;
-            color: black;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Dashboard Cards */
+        .child-selector { display: flex; background: #EEEEEE; padding: 4px; border-radius: 10px; margin-top: 15px; }
+        .child-btn { flex: 1; border: none; background: none; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+        .child-btn.active { background: white; color: black; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .container { padding: 20px; max-width: 600px; margin: 0 auto; }
-        
-        .status-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .status-card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
         .status-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
         .status-value { font-size: 32px; font-weight: 700; margin-top: 4px; }
         .status-time { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-        
         .temp-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .temp-high { background-color: var(--danger); }
-        .temp-med { background-color: var(--warning); }
-        .temp-ok { background-color: var(--success); }
-
-        /* Action Grid */
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .btn-action {
-            background: var(--card-bg);
-            border: none;
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            text-align: left;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.1s;
-        }
+        .btn-action { background: var(--card-bg); border: none; padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: left; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.1s; }
         .btn-action:active { transform: scale(0.98); background: #f0f0f0; }
         .btn-icon { font-size: 24px; margin-bottom: 12px; display: block; }
         .btn-label { font-size: 16px; font-weight: 600; display: block; }
         .btn-sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; display: block; }
-        
         .btn-primary { background: var(--accent-black); color: white; }
         .btn-primary .btn-sub { color: #aaa; }
-
-        /* Timeline */
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
         .timeline { position: relative; padding-left: 20px; }
-        .timeline::before {
-            content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #E0E0E0;
-        }
-        
-        .date-header {
-            font-size: 12px; font-weight: 700; color: var(--text-secondary);
-            margin-top: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
-            background: var(--bg-color); padding: 5px 0; position: relative; z-index: 1;
-        }
-
-        .log-item {
-            position: relative;
-            background: var(--card-bg);
-            padding: 16px;
-            border-radius: var(--radius);
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .log-dot {
-            position: absolute; left: -20px; top: 20px;
-            width: 16px; height: 16px; border-radius: 50%;
-            background: white; border: 4px solid var(--accent-black);
-            z-index: 2;
-        }
+        .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: #E0E0E0; }
+        .date-header { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-top: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg-color); padding: 5px 0; position: relative; z-index: 1; }
+        .log-item { position: relative; background: var(--card-bg); padding: 16px; border-radius: var(--radius); margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .log-dot { position: absolute; left: -20px; top: 20px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid var(--accent-black); z-index: 2; }
         .log-content h4 { margin: 0; font-size: 16px; font-weight: 600; }
         .log-content p { margin: 4px 0 0; font-size: 12px; color: var(--text-secondary); }
         .log-time { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-align: right; }
         .delete-btn { color: #FF6B6B; margin-left: 15px; cursor: pointer; padding: 5px; }
-
-        /* Share Button */
-        .share-btn {
-            width: 100%; background: white; color: var(--accent-black);
-            border: 2px solid var(--accent-black); padding: 14px;
-            border-radius: 8px; font-weight: 600; margin-top: 20px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-
-        /* Modal/Sheet */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 200;
-            display: none; justify-content: center; align-items: flex-end;
-        }
+        .share-btn { width: 100%; background: white; color: var(--accent-black); border: 2px solid var(--accent-black); padding: 14px; border-radius: 8px; font-weight: 600; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; justify-content: center; align-items: flex-end; }
         .modal-overlay.active { display: flex; }
-        .modal-sheet {
-            background: white; width: 100%; max-width: 600px;
-            border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 30px 24px; animation: slideUp 0.3s ease;
-        }
+        .modal-sheet { background: white; width: 100%; max-width: 600px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 30px 24px; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
         .input-group { margin-bottom: 20px; }
         .label-text { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; display: block; }
-        
-        .temp-input {
-            width: 100%; font-size: 48px; font-weight: 700; text-align: center;
-            border: none; border-bottom: 2px solid #E0E0E0; padding: 10px;
-            font-family: 'Inter', sans-serif; outline: none;
-        }
+        .temp-input { width: 100%; font-size: 48px; font-weight: 700; text-align: center; border: none; border-bottom: 2px solid #E0E0E0; padding: 10px; font-family: 'Inter', sans-serif; outline: none; }
         .temp-input:focus { border-color: var(--accent-black); }
-
-        .date-input {
-            width: 100%; padding: 12px; border: 1px solid #E0E0E0; border-radius: 8px;
-            font-size: 16px; font-family: 'Inter', sans-serif; background: #F9F9F9;
-        }
-        
-        .confirm-btn {
-            width: 100%; background: var(--accent-black); color: white;
-            padding: 16px; border-radius: 8px; border: none;
-            font-size: 16px; font-weight: 600; cursor: pointer;
-        }
-
+        .date-input { width: 100%; padding: 12px; border: 1px solid #E0E0E0; border-radius: 8px; font-size: 16px; font-family: 'Inter', sans-serif; background: #F9F9F9; }
+        .confirm-btn { width: 100%; background: var(--accent-black); color: white; padding: 16px; border-radius: 8px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .loading-indicator { text-align: center; padding: 20px; color: #999; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -215,9 +76,9 @@
             <div>
                 <div class="status-label"><span id="status-name">Seth</span>'s Last Temp</div>
                 <div class="status-value" id="lastTempDisplay">--°C</div>
-                <div class="status-time" id="lastTempTime">No data yet</div>
+                <div class="status-time" id="lastTempTime">Syncing...</div>
             </div>
-            <div id="tempVisual" class="temp-indicator" style="width: 20px; height: 20px;"></div>
+            <div id="tempVisual" class="temp-indicator" style="width: 20px; height: 20px; background-color: #ddd;"></div>
         </div>
 
         <!-- Actions -->
@@ -247,7 +108,7 @@
             <span style="font-size:12px; font-weight:400; color:#666;">Showing: <span class="current-child-name">Seth</span></span>
         </div>
         <div class="timeline" id="logList">
-            <!-- Logs go here -->
+            <div class="loading-indicator">Loading data from cloud...</div>
         </div>
 
         <button class="share-btn" onclick="shareReport()">
@@ -256,7 +117,7 @@
 
     </div>
 
-    <!-- Temp Input Modal -->
+    <!-- Modals (Same as before) -->
     <div class="modal-overlay" id="tempModal" onclick="if(event.target === this) closeModal('tempModal')">
         <div class="modal-sheet">
             <h3 style="margin-top:0; font-size: 20px;">Temp for <span class="current-child-name">Seth</span></h3>
@@ -271,7 +132,6 @@
         </div>
     </div>
 
-    <!-- Med Input Modal -->
     <div class="modal-overlay" id="medModal" onclick="if(event.target === this) closeModal('medModal')">
         <div class="modal-sheet">
             <h3 style="margin-top:0; font-size: 20px;">Meds for <span class="current-child-name">Seth</span></h3>
@@ -284,204 +144,143 @@
         </div>
     </div>
 
-    <script>
-        // --- Logic ---
-        
-        // Set Date
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // State
-        let logs = JSON.parse(localStorage.getItem('tsui_family_logs')) || [];
+        // --------------------------------------------------------------
+        // PASTE YOUR FIREBASE CONFIG HERE
+        // --------------------------------------------------------------
+        const firebaseConfig = {
+  apiKey: "AIzaSyACiXd6RikM4CsAb1frWBivuoQmlMenoSM",
+  authDomain: "tsui-family-tracker.firebaseapp.com",
+  projectId: "tsui-family-tracker",
+  storageBucket: "tsui-family-tracker.firebasestorage.app",
+  messagingSenderId: "380348703434",
+  appId: "1:380348703434:web:8c0eb4a5a904676cc24a33"
+        };
+        // --------------------------------------------------------------
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const logsCollection = collection(db, "health_logs");
+
+        // Global State
+        let logs = [];
         let currentChild = localStorage.getItem('tsui_current_child') || 'Seth';
-        let currentMedSelection = '';
+        let unsubscribe = null; // For stopping the listener
 
-        // Helper to get local ISO string for datetime-local input
-        function getLocalISOString() {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            return now.toISOString().slice(0, 16);
-        }
-
-        function saveLogs() {
-            // Sort logs by timestamp descending (newest first)
-            logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            localStorage.setItem('tsui_family_logs', JSON.stringify(logs));
-            render();
-        }
-
-        function switchChild(name) {
+        // UI Helpers
+        window.switchChild = function(name) {
             currentChild = name;
             localStorage.setItem('tsui_current_child', name);
             
-            // Update UI Buttons
+            // Update UI
             document.querySelectorAll('.child-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${name.toLowerCase()}`).classList.add('active');
-            
-            // Update Text Labels
             document.querySelectorAll('.current-child-name').forEach(el => el.innerText = name);
             document.getElementById('status-name').innerText = name;
 
-            render();
+            // Re-subscribe to Firebase for new child
+            subscribeToData();
         }
 
-        function formatTime(isoString) {
-            const date = new Date(isoString);
-            return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        // Real-time Listener
+        function subscribeToData() {
+            if (unsubscribe) unsubscribe(); // Stop listening to previous child
+
+            const q = query(
+                logsCollection, 
+                where("child", "==", currentChild),
+                orderBy("timestamp", "desc")
+            );
+
+            document.getElementById('logList').innerHTML = '<div class="loading-indicator">Syncing...</div>';
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                logs = [];
+                snapshot.forEach((doc) => {
+                    logs.push({ id: doc.id, ...doc.data() });
+                });
+                render();
+            });
         }
 
-        function getRelativeTime(isoString) {
-            const diff = new Date() - new Date(isoString);
-            const mins = Math.floor(diff / 60000);
-            if (mins < 0) return "In future"; // Handle future dates if user selects them
-            if (mins < 60) return `${mins}m ago`;
-            const hours = Math.floor(mins / 60);
-            if (hours < 24) return `${hours}h ${mins % 60}m ago`;
-            return Math.floor(hours/24) + "d ago";
-        }
-
-        function getDateLabel(isoString) {
-            const date = new Date(isoString);
-            const today = new Date();
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-
-            if (date.toDateString() === today.toDateString()) return "Today";
-            if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-
-        // Actions
-        function openTempModal() {
-            document.getElementById('tempTime').value = getLocalISOString();
-            document.getElementById('tempModal').classList.add('active');
-            document.getElementById('tempInput').focus();
-        }
-
-        function openMedModal(medName) {
-            currentMedSelection = medName;
-            document.getElementById('medNameDisplay').innerText = medName;
-            document.getElementById('medTime').value = getLocalISOString();
-            document.getElementById('medModal').classList.add('active');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        function saveTemp() {
+        // Saving Data (Push to Cloud)
+        window.saveTemp = async function() {
             const val = document.getElementById('tempInput').value;
             const timeVal = document.getElementById('tempTime').value;
-            
             if (!val || !timeVal) return;
-            
-            logs.push({
-                id: Date.now(),
-                child: currentChild,
-                type: 'temp',
-                value: val,
-                timestamp: new Date(timeVal).toISOString()
-            });
-            
-            document.getElementById('tempInput').value = '';
-            closeModal('tempModal');
-            saveLogs();
+
+            try {
+                await addDoc(logsCollection, {
+                    child: currentChild,
+                    type: 'temp',
+                    value: val,
+                    timestamp: new Date(timeVal).toISOString()
+                });
+                document.getElementById('tempInput').value = '';
+                closeModal('tempModal');
+            } catch (e) {
+                alert("Error saving: " + e.message);
+            }
         }
 
-        function saveMed() {
+        window.saveMed = async function() {
             const timeVal = document.getElementById('medTime').value;
             if (!timeVal) return;
 
-            logs.push({
-                id: Date.now(),
-                child: currentChild,
-                type: 'med',
-                name: currentMedSelection,
-                timestamp: new Date(timeVal).toISOString()
-            });
-            
-            closeModal('medModal');
-            saveLogs();
-        }
-
-        function deleteLog(id) {
-            if(confirm('Delete this entry?')) {
-                logs = logs.filter(l => l.id !== id);
-                saveLogs();
-            }
-        }
-
-        function shareReport() {
-            const childLogs = logs.filter(l => l.child === currentChild);
-            if (childLogs.length === 0) {
-                alert("No logs to share.");
-                return;
-            }
-
-            let report = `📋 *Health Report: ${currentChild}*\n`;
-            let lastDate = '';
-
-            childLogs.forEach(log => {
-                const dateLabel = getDateLabel(log.timestamp);
-                if (dateLabel !== lastDate) {
-                    report += `\n[${dateLabel}]\n`;
-                    lastDate = dateLabel;
-                }
-                
-                const time = formatTime(log.timestamp);
-                if (log.type === 'temp') {
-                    report += `${time} - 🌡️ ${log.value}°C\n`;
-                } else {
-                    report += `${time} - 💊 ${log.name}\n`;
-                }
-            });
-
-            if (navigator.share) {
-                navigator.share({
-                    title: `${currentChild}'s Health Report`,
-                    text: report
-                }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(report).then(() => {
-                    alert("Report copied to clipboard!");
+            try {
+                await addDoc(logsCollection, {
+                    child: currentChild,
+                    type: 'med',
+                    name: window.currentMedSelection,
+                    timestamp: new Date(timeVal).toISOString()
                 });
+                closeModal('medModal');
+            } catch (e) {
+                alert("Error saving: " + e.message);
             }
         }
 
-        // Render
+        window.deleteLog = async function(id) {
+            if(confirm('Delete this entry?')) {
+                await deleteDoc(doc(db, "health_logs", id));
+            }
+        }
+
+        // Rendering (Same logic, just using the 'logs' array from Firebase)
         function render() {
             const list = document.getElementById('logList');
             list.innerHTML = '';
 
-            // Filter logs for current child
-            const childLogs = logs.filter(l => l.child === currentChild);
-
             // Update Dashboard
-            const lastTempLog = childLogs.find(l => l.type === 'temp');
+            const lastTempLog = logs.find(l => l.type === 'temp');
             if (lastTempLog) {
                 document.getElementById('lastTempDisplay').innerText = `${lastTempLog.value}°C`;
                 document.getElementById('lastTempTime').innerText = getRelativeTime(lastTempLog.timestamp);
                 
                 const tempVal = parseFloat(lastTempLog.value);
                 const indicator = document.getElementById('tempVisual');
-                if (tempVal >= 38.5) indicator.style.backgroundColor = 'var(--danger)';
-                else if (tempVal >= 37.5) indicator.style.backgroundColor = 'var(--warning)';
-                else indicator.style.backgroundColor = 'var(--success)';
+                if (tempVal >= 38.5) indicator.style.backgroundColor = '#E11900';
+                else if (tempVal >= 37.5) indicator.style.backgroundColor = '#FFC043';
+                else indicator.style.backgroundColor = '#05A357';
             } else {
                 document.getElementById('lastTempDisplay').innerText = '--°C';
                 document.getElementById('lastTempTime').innerText = 'No data yet';
                 document.getElementById('tempVisual').style.backgroundColor = '#ddd';
             }
 
-            // Update List with Date Headers
-            if (childLogs.length === 0) {
-                list.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">No records for ' + currentChild + ' yet.</div>';
+            if (logs.length === 0) {
+                list.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">No records yet.</div>';
+                return;
             }
 
             let lastDateLabel = '';
 
-            childLogs.forEach(log => {
-                // Check for new date
+            logs.forEach(log => {
                 const dateLabel = getDateLabel(log.timestamp);
                 if (dateLabel !== lastDateLabel) {
                     const header = document.createElement('div');
@@ -495,16 +294,13 @@
                 item.className = 'log-item';
                 
                 let icon, title, sub, color;
-                
                 if (log.type === 'temp') {
                     const t = parseFloat(log.value);
-                    color = t >= 38.5 ? 'var(--danger)' : (t >= 37.5 ? 'var(--warning)' : 'var(--accent-black)');
-                    icon = 'fa-thermometer-half';
+                    color = t >= 38.5 ? '#E11900' : (t >= 37.5 ? '#FFC043' : '#000000');
                     title = `${log.value}°C`;
                     sub = t >= 38.5 ? 'High Fever' : 'Temperature';
                 } else {
-                    color = log.name === 'Ibuprofen' ? 'var(--danger)' : 'var(--accent-blue)';
-                    icon = log.name === 'Ibuprofen' ? 'fa-pills' : 'fa-capsules';
+                    color = log.name === 'Ibuprofen' ? '#E11900' : '#276EF1';
                     title = log.name;
                     sub = 'Medication';
                 }
@@ -517,18 +313,79 @@
                     </div>
                     <div style="display:flex; align-items:center;">
                         <div class="log-time">${formatTime(log.timestamp)}</div>
-                        <i class="fas fa-times delete-btn" onclick="deleteLog(${log.id})"></i>
+                        <i class="fas fa-times delete-btn" onclick="deleteLog('${log.id}')"></i>
                     </div>
                 `;
                 list.appendChild(item);
             });
         }
 
-        // Init
-        switchChild(currentChild); // This triggers render
+        // --- Standard Helpers ---
+        function getRelativeTime(isoString) {
+            const diff = new Date() - new Date(isoString);
+            const mins = Math.floor(diff / 60000);
+            if (mins < 0) return "In future";
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ${mins % 60}m ago`;
+            return Math.floor(hours/24) + "d ago";
+        }
+        function getDateLabel(isoString) {
+            const date = new Date(isoString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (date.toDateString() === today.toDateString()) return "Today";
+            if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        function formatTime(isoString) {
+            return new Date(isoString).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+        function getLocalISOString() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            return now.toISOString().slice(0, 16);
+        }
+
+        // --- Modal Logic ---
+        window.openTempModal = function() {
+            document.getElementById('tempTime').value = getLocalISOString();
+            document.getElementById('tempModal').classList.add('active');
+            document.getElementById('tempInput').focus();
+        }
+        window.openMedModal = function(medName) {
+            window.currentMedSelection = medName;
+            document.getElementById('medNameDisplay').innerText = medName;
+            document.getElementById('medTime').value = getLocalISOString();
+            document.getElementById('medModal').classList.add('active');
+        }
+        window.closeModal = function(id) {
+            document.getElementById(id).classList.remove('active');
+        }
         
-        // Auto refresh relative time every minute
-        setInterval(render, 60000);
+        // Share Report Logic (Same as before)
+        window.shareReport = function() {
+             if (logs.length === 0) { alert("No logs to share."); return; }
+             let report = `📋 *Health Report: ${currentChild}*\n`;
+             let lastDate = '';
+             logs.forEach(log => {
+                 const dateLabel = getDateLabel(log.timestamp);
+                 if (dateLabel !== lastDate) { report += `\n[${dateLabel}]\n`; lastDate = dateLabel; }
+                 const time = formatTime(log.timestamp);
+                 if (log.type === 'temp') report += `${time} - 🌡️ ${log.value}°C\n`;
+                 else report += `${time} - 💊 ${log.name}\n`;
+             });
+             if (navigator.share) { navigator.share({ title: `${currentChild}'s Health Report`, text: report }).catch(console.error); }
+             else { navigator.clipboard.writeText(report).then(() => { alert("Report copied to clipboard!"); }); }
+        }
+
+        // Init
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
+        
+        // Start Listening
+        switchChild(currentChild);
 
     </script>
 </body>
