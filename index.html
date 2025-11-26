@@ -387,6 +387,257 @@
         // Start Listening
         switchChild(currentChild);
 
+<!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // --------------------------------------------------------------
+        // PASTE YOUR FIREBASE CONFIG HERE
+        // --------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",        // <--- PASTE YOUR REAL KEYS HERE
+            authDomain: "...",
+            projectId: "...",
+            storageBucket: "...",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+        // --------------------------------------------------------------
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const logsCollection = collection(db, "health_logs");
+
+        // Global State
+        let logs = [];
+        let currentChild = localStorage.getItem('tsui_current_child') || 'Seth';
+        let unsubscribe = null; 
+
+        // UI Helpers
+        window.switchChild = function(name) {
+            currentChild = name;
+            localStorage.setItem('tsui_current_child', name);
+            
+            // Update UI
+            document.querySelectorAll('.child-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${name.toLowerCase()}`).classList.add('active');
+            document.querySelectorAll('.current-child-name').forEach(el => el.innerText = name);
+            document.getElementById('status-name').innerText = name;
+
+            // Re-subscribe
+            subscribeToData();
+        }
+
+        // Real-time Listener (UPDATED TO FIX SYNC ISSUE)
+        function subscribeToData() {
+            if (unsubscribe) unsubscribe(); 
+
+            // REMOVED 'orderBy' to avoid Index errors
+            const q = query(
+                logsCollection, 
+                where("child", "==", currentChild)
+            );
+
+            document.getElementById('logList').innerHTML = '<div class="loading-indicator">Syncing...</div>';
+
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                logs = [];
+                snapshot.forEach((doc) => {
+                    logs.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort manually in the browser instead
+                logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                render();
+            }, (error) => {
+                // If there is still an error, show it
+                console.error("Sync Error:", error);
+                document.getElementById('logList').innerHTML = `<div class="loading-indicator" style="color:red">Error: ${error.message}</div>`;
+            });
+        }
+
+        // Saving Data
+        window.saveTemp = async function() {
+            const val = document.getElementById('tempInput').value;
+            const timeVal = document.getElementById('tempTime').value;
+            if (!val || !timeVal) return;
+
+            try {
+                await addDoc(logsCollection, {
+                    child: currentChild,
+                    type: 'temp',
+                    value: val,
+                    timestamp: new Date(timeVal).toISOString()
+                });
+                document.getElementById('tempInput').value = '';
+                closeModal('tempModal');
+            } catch (e) {
+                alert("Error saving: " + e.message);
+            }
+        }
+
+        window.saveMed = async function() {
+            const timeVal = document.getElementById('medTime').value;
+            if (!timeVal) return;
+
+            try {
+                await addDoc(logsCollection, {
+                    child: currentChild,
+                    type: 'med',
+                    name: window.currentMedSelection,
+                    timestamp: new Date(timeVal).toISOString()
+                });
+                closeModal('medModal');
+            } catch (e) {
+                alert("Error saving: " + e.message);
+            }
+        }
+
+        window.deleteLog = async function(id) {
+            if(confirm('Delete this entry?')) {
+                await deleteDoc(doc(db, "health_logs", id));
+            }
+        }
+
+        // Rendering
+        function render() {
+            const list = document.getElementById('logList');
+            list.innerHTML = '';
+
+            // Update Dashboard
+            const lastTempLog = logs.find(l => l.type === 'temp');
+            if (lastTempLog) {
+                document.getElementById('lastTempDisplay').innerText = `${lastTempLog.value}°C`;
+                document.getElementById('lastTempTime').innerText = getRelativeTime(lastTempLog.timestamp);
+                
+                const tempVal = parseFloat(lastTempLog.value);
+                const indicator = document.getElementById('tempVisual');
+                if (tempVal >= 38.5) indicator.style.backgroundColor = '#E11900';
+                else if (tempVal >= 37.5) indicator.style.backgroundColor = '#FFC043';
+                else indicator.style.backgroundColor = '#05A357';
+            } else {
+                document.getElementById('lastTempDisplay').innerText = '--°C';
+                document.getElementById('lastTempTime').innerText = 'No data yet';
+                document.getElementById('tempVisual').style.backgroundColor = '#ddd';
+            }
+
+            if (logs.length === 0) {
+                list.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">No records yet.</div>';
+                return;
+            }
+
+            let lastDateLabel = '';
+
+            logs.forEach(log => {
+                const dateLabel = getDateLabel(log.timestamp);
+                if (dateLabel !== lastDateLabel) {
+                    const header = document.createElement('div');
+                    header.className = 'date-header';
+                    header.innerText = dateLabel;
+                    list.appendChild(header);
+                    lastDateLabel = dateLabel;
+                }
+
+                const item = document.createElement('div');
+                item.className = 'log-item';
+                
+                let icon, title, sub, color;
+                if (log.type === 'temp') {
+                    const t = parseFloat(log.value);
+                    color = t >= 38.5 ? '#E11900' : (t >= 37.5 ? '#FFC043' : '#000000');
+                    title = `${log.value}°C`;
+                    sub = t >= 38.5 ? 'High Fever' : 'Temperature';
+                } else {
+                    color = log.name === 'Ibuprofen' ? '#E11900' : '#276EF1';
+                    title = log.name;
+                    sub = 'Medication';
+                }
+
+                item.innerHTML = `
+                    <div class="log-dot" style="border-color: ${color}"></div>
+                    <div class="log-content">
+                        <h4 style="color: ${log.type === 'temp' ? color : 'inherit'}">${title}</h4>
+                        <p>${sub}</p>
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                        <div class="log-time">${formatTime(log.timestamp)}</div>
+                        <i class="fas fa-times delete-btn" onclick="deleteLog('${log.id}')"></i>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // --- Standard Helpers ---
+        function getRelativeTime(isoString) {
+            const diff = new Date() - new Date(isoString);
+            const mins = Math.floor(diff / 60000);
+            if (mins < 0) return "In future";
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ${mins % 60}m ago`;
+            return Math.floor(hours/24) + "d ago";
+        }
+        function getDateLabel(isoString) {
+            const date = new Date(isoString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (date.toDateString() === today.toDateString()) return "Today";
+            if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        function formatTime(isoString) {
+            return new Date(isoString).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+        function getLocalISOString() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            return now.toISOString().slice(0, 16);
+        }
+
+        // --- Modal Logic ---
+        window.openTempModal = function() {
+            document.getElementById('tempTime').value = getLocalISOString();
+            document.getElementById('tempModal').classList.add('active');
+            document.getElementById('tempInput').focus();
+        }
+        window.openMedModal = function(medName) {
+            window.currentMedSelection = medName;
+            document.getElementById('medNameDisplay').innerText = medName;
+            document.getElementById('medTime').value = getLocalISOString();
+            document.getElementById('medModal').classList.add('active');
+        }
+        window.closeModal = function(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        // Share Report Logic
+        window.shareReport = function() {
+             if (logs.length === 0) { alert("No logs to share."); return; }
+             let report = `📋 *Health Report: ${currentChild}*\n`;
+             let lastDate = '';
+             logs.forEach(log => {
+                 const dateLabel = getDateLabel(log.timestamp);
+                 if (dateLabel !== lastDate) { report += `\n[${dateLabel}]\n`; lastDate = dateLabel; }
+                 const time = formatTime(log.timestamp);
+                 if (log.type === 'temp') report += `${time} - 🌡️ ${log.value}°C\n`;
+                 else report += `${time} - 💊 ${log.name}\n`;
+             });
+             if (navigator.share) { navigator.share({ title: `${currentChild}'s Health Report`, text: report }).catch(console.error); }
+             else { navigator.clipboard.writeText(report).then(() => { alert("Report copied to clipboard!"); }); }
+        }
+
+        // Init
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
+        
+        // Start Listening
+        switchChild(currentChild);
+
     </script>
 </body>
 </html>
